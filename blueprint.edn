@@ -1,0 +1,11 @@
+{:itonami.blueprint/id "cloud-itonami-7210"
+ :itonami.blueprint/name "Research and experimental development on natural sciences and engineering"
+ :itonami.blueprint/isic-rev5 "7210"
+ :itonami.blueprint/domain :professional/rd-natural-sciences
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:professional-standards :data-sovereignty :transparency]
+ :itonami.blueprint/governor :research-integrity-governor
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :cae]
+ :itonami.blueprint/optional-technologies []
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/robotics true}
