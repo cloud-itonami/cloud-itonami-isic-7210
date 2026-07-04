@@ -2,7 +2,7 @@
 
 ## Classification
 
-- Repository: `cloud-itonami-7210`
+- Repository: `cloud-itonami-isic-7210`
 - ISIC Rev.5: `7210`
 - Activity: research and experimental development on natural sciences and engineering -- systematic creative work to increase scientific/technical knowledge and its application
 - Social impact: professional standards, data sovereignty, transparent audit

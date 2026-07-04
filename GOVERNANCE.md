@@ -1,6 +1,6 @@
 # Governance
 
-`cloud-itonami-7210` is an OSS open-business blueprint for research and experimental development on natural sciences and engineering -- systematic creative work to increase scientific/technical knowledge and its application.
+`cloud-itonami-isic-7210` is an OSS open-business blueprint for research and experimental development on natural sciences and engineering -- systematic creative work to increase scientific/technical knowledge and its application.
 Governance covers both the capability layer and the operator model.
 
 ## Maintainers

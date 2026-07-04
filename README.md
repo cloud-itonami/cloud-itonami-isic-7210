@@ -1,4 +1,4 @@
-# cloud-itonami-7210
+# cloud-itonami-isic-7210
 
 Open Business Blueprint for **ISIC Rev.5 7210**: Research and experimental development on natural sciences and engineering.
 
