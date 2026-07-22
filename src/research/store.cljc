@@ -32,10 +32,9 @@
   whom' is always a query over an immutable log -- the audit trail the
   scientific community trusting a research lab needs, and the evidence
   a lab needs if a publication decision is later disputed."
-  (:require #?(:clj  [clojure.edn :as edn]
-               :cljs [cljs.reader :as edn])
-            [research.registry :as registry]
-            [langchain.db :as d]))
+  (:require [research.registry :as registry]
+            [langchain.db :as d]
+            [langchain-store.core :as ls]))
 
 (defprotocol Store
   (study [s id])
@@ -145,16 +144,13 @@
   Compound values (protocol/risk-screen payloads, ledger facts, report
   records) are stored as EDN strings so `langchain.db` doesn't expand
   them into sub-entities -- the same convention every sibling actor's
-  store uses."
-  {:study/id                           {:db/unique :db.unique/identity}
-   :protocol/study-id                  {:db/unique :db.unique/identity}
-   :risk-screen/study-id               {:db/unique :db.unique/identity}
-   :ledger/seq                        {:db/unique :db.unique/identity}
-   :report/seq                        {:db/unique :db.unique/identity}
-   :report-sequence/jurisdiction      {:db/unique :db.unique/identity}})
-
-(defn- enc [v] (pr-str v))
-(defn- dec* [s] (when s (edn/read-string s)))
+  store uses. The identity-schema builder, EDN-blob codec and
+  seq-keyed event-log read/append are the shared kotoba-lang/
+  langchain-store machinery (ADR-2607141600) -- the seam ~190 actors
+  hand-roll; this store keeps only its domain wiring."
+  (ls/identity-schema
+   [:study/id :protocol/study-id :risk-screen/study-id
+    :ledger/seq :report/seq :report-sequence/jurisdiction]))
 
 (defn- study->tx [{:keys [id lab-name actual-replication-count minimum-required-replication-count
                         data-reproducibility-risk-unresolved?
@@ -194,21 +190,15 @@
          (map #(pull->study (d/pull (d/db conn) study-pull [:study/id %])))
          (sort-by :id)))
   (risk-screen-of [_ id]
-    (dec* (d/q '[:find ?p . :in $ ?sid
+    (ls/dec* (d/q '[:find ?p . :in $ ?sid
                 :where [?k :risk-screen/study-id ?sid] [?k :risk-screen/payload ?p]]
               (d/db conn) id)))
   (protocol-of [_ study-id]
-    (dec* (d/q '[:find ?p . :in $ ?sid
+    (ls/dec* (d/q '[:find ?p . :in $ ?sid
                 :where [?a :protocol/study-id ?sid] [?a :protocol/payload ?p]]
               (d/db conn) study-id)))
-  (ledger [_]
-    (->> (d/q '[:find ?s ?f :where [?e :ledger/seq ?s] [?e :ledger/fact ?f]] (d/db conn))
-         (sort-by first)
-         (mapv (comp dec* second))))
-  (report-history [_]
-    (->> (d/q '[:find ?s ?r :where [?e :report/seq ?s] [?e :report/record ?r]] (d/db conn))
-         (sort-by first)
-         (mapv (comp dec* second))))
+  (ledger [_] (ls/read-stream conn :ledger/seq :ledger/fact))
+  (report-history [_] (ls/read-stream conn :report/seq :report/record))
   (next-report-sequence [_ jurisdiction]
     (or (d/q '[:find ?n . :in $ ?j
               :where [?e :report-sequence/jurisdiction ?j] [?e :report-sequence/next ?n]]
@@ -222,10 +212,10 @@
       (d/transact! conn [(study->tx value)])
 
       :protocol/set
-      (d/transact! conn [{:protocol/study-id (first path) :protocol/payload (enc payload)}])
+      (d/transact! conn [{:protocol/study-id (first path) :protocol/payload (ls/enc payload)}])
 
       :risk-screen/set
-      (d/transact! conn [{:risk-screen/study-id (first path) :risk-screen/payload (enc payload)}])
+      (d/transact! conn [{:risk-screen/study-id (first path) :risk-screen/payload (ls/enc payload)}])
 
       :study/mark-published
       (let [study-id (first path)
@@ -235,12 +225,12 @@
         (d/transact! conn
                      [(study->tx (assoc study-patch :id study-id))
                       {:report-sequence/jurisdiction jurisdiction :report-sequence/next next-n}
-                      {:report/seq (count (report-history s)) :report/record (enc (get result "record"))}])
+                      {:report/seq (count (report-history s)) :report/record (ls/enc (get result "record"))}])
         result)
       nil)
     s)
   (append-ledger! [s fact]
-    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (enc fact)}])
+    (ls/append-blob! conn :ledger/seq :ledger/fact (count (ledger s)) fact)
     fact)
   (with-studies [s studies]
     (when (seq studies) (d/transact! conn (mapv study->tx (vals studies)))) s))
