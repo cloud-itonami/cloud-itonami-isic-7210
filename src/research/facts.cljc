@@ -61,7 +61,43 @@
           :required-evidence ["Versuchsprotokoll (experiment-protocol-record)"
                               "Datenerhebungsprotokoll (data-collection-record)"
                               "Methodikzitierungsprotokoll (methodology-citation-record)"
-                              "Replikationsprotokoll (replication-record)"]}})
+                              "Replikationsprotokoll (replication-record)"]}
+   ;; BEL: Flemish-Community research-integrity oversight only (VCWI).
+   ;; Belgium's research/education competence is regionalized, not
+   ;; federal -- there is no single Belgium-wide body analogous to
+   ;; MEXT/ORI/UKRIO/DFG above. A French-Community counterpart under
+   ;; ARES (ares-ac.be) was sought but could NOT be independently
+   ;; verified this session: the live site returned an automated-access
+   ;; rejection ("Request Rejected", a WAF block, not a CAPTCHA/Cloudflare
+   ;; challenge -- left un-bypassed per policy), and a "Charte
+   ;; d'intégrité" found for that domain via the Internet Archive Wayback
+   ;; Machine turned out, on read, to be an unrelated development-
+   ;; cooperation anti-fraud charter (ACODEV/NGO-federatie/FIABEL/Enabel/
+   ;; BIO), not a research-misconduct code -- so it is honestly omitted
+   ;; rather than guessed into this entry. Do not conflate the two; add a
+   ;; verified ARES/federal entry later only off a real fetched source.
+   ;;
+   ;; Also NOT in this entry, and deliberately so: Belgium's BELSPO-
+   ;; administered fiscal R&D incentives (the "vrijstelling van
+   ;; doorstorting van bedrijfsvoorheffing voor onderzoekers" withholding-
+   ;; tax exemption under WIB92 art. 275³, and the separate "aftrek voor
+   ;; innovatie-inkomsten" / innovation-income deduction under the Wet
+   ;; van 9 februari 2017) are a genuine, independently-verified Belgian
+   ;; R&D regime (see https://www.belspo.be/belspo/fiscal/ and its
+   ;; sub-pages), but they are TAX law, not a research-integrity/good-
+   ;; scientific-practice framework -- this catalog's own governor
+   ;; (`research.governor`) checks spec-basis for the latter only, so
+   ;; fiscal citations do not belong in `:legal-basis` here even though
+   ;; they were genuinely researched for this jurisdiction.
+   "BEL" {:name "Belgium"
+          :owner-authority "Vlaamse Commissie voor Wetenschappelijke Integriteit (VCWI) -- Flemish Commission for Research Integrity"
+          :legal-basis "VCWI-Reglement (VCWI Regulations) art. 2 sec. 2: the VCWI's research-integrity mandate is defined by reference to the (ALLEA) European Code of Conduct for Research Integrity"
+          :national-spec "Vlaamse Commissie voor Wetenschappelijke Integriteit, ingesteld 7 oktober 2013 -- tweedeadviesorgaan (second-opinion body) for research-misconduct complaints at its affiliated Flemish institutions (KU Leuven, UGent, UAntwerpen, UHasselt, VUB, FWO, VITO, imec, VIB e.a.)"
+          :provenance "https://www.vcwi.be/sites/default/files/VCWI_REGLEMENT.pdf"
+          :required-evidence ["Onderzoeksprotocolrecord (experiment-protocol-record)"
+                              "Gegevensverzamelingsrecord (data-collection-record)"
+                              "Methodologie-citatierecord (methodology-citation-record)"
+                              "Replicatierecord (replication-record)"]}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,
