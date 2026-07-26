@@ -7,7 +7,8 @@
   numbers, no timestamps, byte-identical across reruns against the same
   seed -- every table cell here traces to a field actually read off the
   store after `run-demo!` actually executed the graph."
-  (:require [clojure.string :as str]
+  (:require [jp-go-dds.skin]
+            [clojure.string :as str]
             [research.store :as store]
             [research.operation :as op]
             [langgraph.graph :as g]))
@@ -249,7 +250,9 @@ code { font-size: 12px; background: #f4f4f4; padding: 1px 4px; border-radius: 3p
    "<meta charset=\"utf-8\">\n"
    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
    "<title>cloud-itonami-isic-7210 &middot; research.render-html</title>\n"
-   "<style>" css "</style>\n</head>\n<body>\n"
+   "<style>"
+   (jp-go-dds.skin/dds+skin)
+   "</style>\n</head>\n<body>\n"
    (h [:header.bar
        [:h1 "cloud-itonami-isic-7210 -- Research Integrity operator console"]
        [:span.badge "research.render-html · driven live through research.operation -> research.governor -> research.store, no hand-typed values"]])
