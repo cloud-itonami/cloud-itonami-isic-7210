@@ -8,7 +8,7 @@
   seed -- every table cell here traces to a field actually read off the
   store after `run-demo!` actually executed the graph."
   (:require [jp-go-dds.skin]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [research.store :as store]
             [research.operation :as op]
             [langgraph.graph :as g]))
