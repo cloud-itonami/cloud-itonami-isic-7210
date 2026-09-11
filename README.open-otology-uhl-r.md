@@ -65,7 +65,7 @@ The Worker enforces these as `const: true` from the Lexicon schema.
 - **Skeleton only.** Handler wiring + Lexicon binding + DID config are in place.
 - Real langserver proxy and atrecord audit emission are P1 deliverables.
 - The clinician review UI now lives at `cljs/` (reagent + re-frame +
-  jp-go-dds hiccup, `cljs/src/isic7210/app.cljs`) — not the Svelte UI
+  jp-go-dds hiccup, `cljs/src/isic7210/app.cljk`) — not the Svelte UI
   this line used to describe as a P1 plan. It was ported from a
   since-deleted `svelte/` Vite/Svelte scaffold on 2026-09-10; see that
   commit for what moved and what was scaffold junk.

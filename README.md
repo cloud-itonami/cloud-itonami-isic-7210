@@ -106,7 +106,7 @@ at any phase, by construction.** Two independent layers enforce this
 (`research.governor`'s `:actuation/publish-findings-report` high-
 stakes gate and `research.phase`'s phase table, which never puts
 `:actuation/publish-findings-report` in any phase's `:auto` set) --
-see `research.phase`'s docstring and `test/research/phase_test.clj`'s
+see `research.phase`'s docstring and `test/research/phase_test.cljk`'s
 `publish-findings-report-never-auto-at-any-phase`. The actor may
 draft, check and recommend; a human research operator/PI is always
 the one who actually publishes a findings report. Matching
@@ -205,14 +205,14 @@ the backing `:cae` library at that layer.
 
 | File | Role |
 |---|---|
-| `src/research/store.cljc` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + findings-report history. No dynamically-filed sub-record -- the actuation op acts directly on a pre-seeded study, and the double-actuation guard checks a dedicated `:findings-report-published?` boolean rather than a `:status` value |
-| `src/research/registry.cljc` | Findings-report draft records, plus `replication-count-insufficient?` -- the SEVENTH instance of this fleet's MINIMUM-threshold sufficiency check family (`veterinary`/`funeral`/`hospital` established the first three, all temporal; `association`/`secondary`/`polling` generalized it to non-temporal ground truths as the fourth, fifth and sixth) |
-| `src/research/facts.cljc` | Per-jurisdiction research-integrity catalog with an official spec-basis citation per entry, honest coverage reporting |
-| `src/research/researchadvisor.cljc` | **LabOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/protocol-verification/data-reproducibility-risk-screening/findings-report-publication proposals |
-| `src/research/governor.cljc` | **Research Integrity Governor** -- 3 HARD checks (spec-basis · evidence-incomplete · replication-count-insufficient, pure ground-truth floor recompute · data-reproducibility-risk-unresolved, unconditional evaluation, the FORTIETH grounding of this discipline, a genuinely new concept grounded in this blueprint's own Trust Control text) + already-published guard + 1 soft (confidence/actuation gate) |
-| `src/research/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (findings-report publication always human; study intake is the ONLY auto-eligible op, no direct capital risk) |
-| `src/research/operation.cljc` | **OperationActor** -- langgraph-clj StateGraph |
-| `src/research/sim.cljc` | demo driver |
+| `src/research/store.cljk` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + findings-report history. No dynamically-filed sub-record -- the actuation op acts directly on a pre-seeded study, and the double-actuation guard checks a dedicated `:findings-report-published?` boolean rather than a `:status` value |
+| `src/research/registry.cljk` | Findings-report draft records, plus `replication-count-insufficient?` -- the SEVENTH instance of this fleet's MINIMUM-threshold sufficiency check family (`veterinary`/`funeral`/`hospital` established the first three, all temporal; `association`/`secondary`/`polling` generalized it to non-temporal ground truths as the fourth, fifth and sixth) |
+| `src/research/facts.cljk` | Per-jurisdiction research-integrity catalog with an official spec-basis citation per entry, honest coverage reporting |
+| `src/research/researchadvisor.cljk` | **LabOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/protocol-verification/data-reproducibility-risk-screening/findings-report-publication proposals |
+| `src/research/governor.cljk` | **Research Integrity Governor** -- 3 HARD checks (spec-basis · evidence-incomplete · replication-count-insufficient, pure ground-truth floor recompute · data-reproducibility-risk-unresolved, unconditional evaluation, the FORTIETH grounding of this discipline, a genuinely new concept grounded in this blueprint's own Trust Control text) + already-published guard + 1 soft (confidence/actuation gate) |
+| `src/research/phase.cljk` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (findings-report publication always human; study intake is the ONLY auto-eligible op, no direct capital risk) |
+| `src/research/operation.cljk` | **OperationActor** -- langgraph-clj StateGraph |
+| `src/research/sim.cljk` | demo driver |
 | `test/research/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)
