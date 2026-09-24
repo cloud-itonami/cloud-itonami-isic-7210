@@ -1,0 +1,41 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a lab-automation robot performs physical sample
+;; handling and instrument operation (ISIC 7210, research and experimental
+;; development on natural sciences and engineering). Its physical work:
+;; moving microplates between instruments, dispensing reagent through fine
+;; tubing, and heating samples in a heat block to denaturation temperature.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-7210"
+ :cases
+ [{:id :microplate-reader-to-incubator
+   :kind :manipulator
+   :procedure "arm moves a filled microplate (with lid) from the plate reader to the incubator shelf; faster moves raise throughput"
+   :params {:l1-m 0.30 :l2-m 0.25 :m1-kg 2.0 :m2-kg 1.5 :payload-kg 0.25
+            :from [0.40 0.05] :to [0.10 0.40] :steps 500}
+   :sweep {:param :duration-s :values [0.25 0.4 0.6 1.0 1.5]}
+   :quantity :peak-tau1-nm
+   :limit {:max 12.0 :basis "estimate: continuous shoulder torque of a benchtop lab-automation arm (~1 kg class)"}
+   :boundary {:lo 0.15 :hi 3.0}}
+  {:id :reagent-dispense-tubing
+   :kind :pipe-flow
+   :procedure "syringe pump pushes aqueous reagent through 1 m of 0.5 mm bore PTFE tubing to the dispense head"
+   :params {:diameter-m 5.0e-4 :length-m 1.0 :roughness-m 1.0e-6 :pump-efficiency 0.5}
+   :sweep {:param :q-m3s :values [1.0e-8 5.0e-8 1.0e-7 2.0e-7 4.0e-7]}
+   :quantity :pressure-drop-pa
+   :limit {:max 200000.0 :basis "estimate: 2 bar working limit of the push-fit tubing connectors at the dispense head"}
+   :boundary {:lo 5.0e-9 :hi 8.0e-7}}
+  {:id :sample-heat-block-denature
+   :kind :thermal
+   :procedure "aqueous sample in a 95 C heat block, heated from both sides of the tube; half the sample layer is modelled (mid-plane symmetry) until the mid-plane reaches 94 C"
+   :params {:conductivity-w-mk 0.6 :density-kg-m3 1000.0 :specific-heat-j-kgk 4180.0
+            :t0-c 25.0 :t-hot-c 95.0 :h-front-w-m2k 300.0 :h-back-w-m2k 0.0
+            :threshold-c 94.0 :duration-s 600.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.0005 0.001 0.0015 0.002 0.003]}
+   :quantity :time-to-threshold-s
+   :limit {:max 60.0 :basis "estimate: the protocol's one-minute initial denaturation step must actually hold the whole sample near 94 C"}
+   :boundary {:lo 0.0002 :hi 0.005}}]}
