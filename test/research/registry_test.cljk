@@ -1,5 +1,5 @@
 (ns research.registry-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [research.registry :as r]))
 
 ;; ----------------------------- replication-count-insufficient? -----------------------------
