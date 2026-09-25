@@ -53,7 +53,7 @@
                          :css (slurp (io/resource \"jp_go_dds/dds.css\"))}
                         [:div {:id \"app\"} \"loading…\"]
                         [:script {:src \"js/app.js\"}]))"
-  (:require [clojure.string :as string]
+  (:require [kotoba.lang.text :as string]
             [reagent.dom :as rdom]
             [re-frame.core :as rf]
             [jp-go-dds.core :as dds]))
